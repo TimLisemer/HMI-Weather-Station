@@ -31,3 +31,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     wiringPi.h
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/wiringPi/wiringPi/release/ -lwiringPi
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/wiringPi/wiringPi/debug/ -lwiringPi
+else:unix: LIBS += -L$$PWD/wiringPi/wiringPi/ -lwiringPi
+
+INCLUDEPATH += $$PWD/wiringPi/wiringPi
+DEPENDPATH += $$PWD/wiringPi/wiringPi
