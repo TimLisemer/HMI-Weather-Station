@@ -29,9 +29,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../Downloads/build-wiringpiqt-Boot2Qt_Qt_5_14_2-Debug/wiringPi/release/ -lwiringPi
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../Downloads/build-wiringpiqt-Boot2Qt_Qt_5_14_2-Debug/wiringPi/debug/ -lwiringPi
-else:unix: LIBS += -L$$PWD/../../../Downloads/build-wiringpiqt-Boot2Qt_Qt_5_14_2-Debug/wiringPi/ -lwiringPi
-
-INCLUDEPATH += $$PWD/wiringPi
-DEPENDPATH += $$PWD/wiringPi
+HEADERS += \
+    wiringPi.h
