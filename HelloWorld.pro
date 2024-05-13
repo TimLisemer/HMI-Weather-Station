@@ -33,5 +33,5 @@ win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../Downloads/build-w
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../Downloads/build-wiringpiqt-Boot2Qt_Qt_5_14_2-Debug/wiringPi/debug/ -lwiringPi
 else:unix: LIBS += -L$$PWD/../../../Downloads/build-wiringpiqt-Boot2Qt_Qt_5_14_2-Debug/wiringPi/ -lwiringPi
 
-INCLUDEPATH += $$PWD/../../../Downloads/build-wiringpiqt-Boot2Qt_Qt_5_14_2-Debug/wiringPi
-DEPENDPATH += $$PWD/../../../Downloads/build-wiringpiqt-Boot2Qt_Qt_5_14_2-Debug/wiringPi
+INCLUDEPATH += $$PWD/wiringPi
+DEPENDPATH += $$PWD/wiringPi
