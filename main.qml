@@ -5,17 +5,40 @@ Window {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("Sensor Reader")
     color: "green"
 
-    Text {
-        visible: true
+    Column {
         anchors.centerIn: parent
-        text: "Hello World"
-        color: "red"
-        font.pointSize: 36
 
+        Text {
+            text: "Light Sensor: " + sensorReader.sensorValue
+            color: "red"
+            font.pointSize: 24
+        }
+
+        Text {
+            text: "Berlin Time: " + sensorReader.berlinTime
+            color: "white"
+            font.pointSize: 24
+        }
+
+        Text {
+            text: "UTC Time: " + sensorReader.utcTime
+            color: "white"
+            font.pointSize: 24
+        }
+
+        Text {
+            text: "IP Address: " + sensorReader.ipAddress
+            color: "white"
+            font.pointSize: 24
+        }
+
+        Text {
+            text: "Hostname: " + sensorReader.hostname
+            color: "white"
+            font.pointSize: 24
+        }
     }
-
 }
-
