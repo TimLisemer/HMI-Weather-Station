@@ -6,16 +6,35 @@ Window {
     width: 640
     height: 480
     title: qsTr("Sensor Reader")
-    color: "green"
+    color: "#454545"
+
+    Image {
+        visible: sensorReader.sensorValue > 0
+        x: 40
+        y: 40
+        scale: 0.3
+        id: sun
+        source: "../img/Sun.png"
+    }
+
+    Image {
+        visible: sensorReader.sensorValue < 1
+        x: 50
+        y: 50
+        scale: 0.3
+        id: moon
+        source: "../img/Moon.png"
+    }
 
     Column {
         anchors.centerIn: parent
 
         Text {
             text: "Light Sensor: " + sensorReader.sensorValue
-            color: "red"
+            color: "Yellow"
             font.pointSize: 24
         }
+
 
         Text {
             text: "Berlin Time: " + sensorReader.berlinTime
