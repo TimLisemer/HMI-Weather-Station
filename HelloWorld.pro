@@ -14,10 +14,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        controller.cpp \
         main.cpp \
         sensorreader.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    img/Moon.png \
+    img/Sun.png
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -31,6 +34,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    controller.h \
     sensorreader.h \
     wiringPi.h \
     wiringPiI2C.h
@@ -41,3 +45,7 @@ else:unix: LIBS += -L$$PWD/wiringPi/wiringPi/ -lwiringPi
 
 INCLUDEPATH += $$PWD/wiringPi/wiringPi
 DEPENDPATH += $$PWD/wiringPi/wiringPi
+
+DISTFILES += \
+    img/Moon.png \
+    img/Sun.png
