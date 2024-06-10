@@ -19,28 +19,34 @@ Window {
             anchors.horizontalCenter: parent.horizontalCenter
 
             Button {
-                text: "Light Sensor"
-                onClicked: displayMode = "LightSensor"
+                text: "<-"
+                onClicked: displayMode = "Home"
+            }
+
+
+            Button {
+                text: "Light"
+                onClicked: displayMode = "Light"
             }
 
             Button {
-                text: "Berlin Time"
-                onClicked: displayMode = "BerlinTime"
+                text: "Time"
+                onClicked: displayMode = "Time"
             }
 
             Button {
-                text: "UTC Time"
-                onClicked: displayMode = "UTCTime"
+                text: "Humidity"
+                onClicked: displayMode = "Humidity"
             }
 
             Button {
-                text: "IP Address"
-                onClicked: displayMode = "IPAddress"
+                text: "Pressure"
+                onClicked: displayMode = "Pressure"
             }
 
             Button {
-                text: "Hostname"
-                onClicked: displayMode = "Hostname"
+                text: "Temp"
+                onClicked: displayMode = "Temp"
             }
         }
 
@@ -53,16 +59,23 @@ Window {
 
             text: {
                 switch (displayMode) {
-                    case "LightSensor":
+                    case "Home":
                         return "Light Sensor: " + sensorReader.sensorValue
-                    case "BerlinTime":
-                        return "Berlin Time: " + sensorReader.berlinTime
-                    case "UTCTime":
-                        return "UTC Time: " + sensorReader.utcTime
-                    case "IPAddress":
-                        return "IP Address: " + sensorReader.ipAddress
-                    case "Hostname":
-                        return "Hostname: " + sensorReader.hostname
+                                + "\n" +"Berlin Time: " + sensorReader.berlinTime + "\n" + "UTC Time: " + sensorReader.utcTime
+                                + "\n" +"Humidity: " + sensorReader.humidity
+                                + "\n" +"Air Pressure: " + sensorReader.pressure + " hPa"
+                                + "\n" +"Temperature: " + sensorReader.temp + "°C"
+
+                    case "Light":
+                        return "Light Sensor: " + sensorReader.sensorValue
+                    case "Time":
+                        return "Berlin Time: " + sensorReader.berlinTime + "\n UTC Time: " + sensorReader.utcTime
+                    case "Humidity":
+                        return "Humidity: " + sensorReader.humidity
+                    case "Pressure":
+                        return "Air Pressure: " + sensorReader.pressure + " hPa"
+                    case "Temp":
+                        return "Temperature: " + sensorReader.temp + "°C"
                     default:
                         return "Select an option"
                 }
@@ -70,7 +83,7 @@ Window {
 
             color: {
                 switch (displayMode) {
-                    case "LightSensor":
+                    case "Light":
                         return "Yellow"
                     default:
                         return "white"
@@ -83,7 +96,7 @@ Window {
     Image {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: displayMode == "LightSensor" && sensorReader.sensorValue < 1
+        visible: displayMode == "Light" && sensorReader.sensorValue < 1
         width: 200  // Größere Breite
         height: 200 // Größere Höhe
         source: "../img/Sun.png"
@@ -92,12 +105,12 @@ Window {
     Image {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: displayMode == "LightSensor" && sensorReader.sensorValue > 0
+        visible: displayMode == "Light" && sensorReader.sensorValue > 0
         width: 200  // Größere Breite
         height: 200 // Größere Höhe
         source: "../img/Moon.png"
     }
 
     // Property für die Anzeigeauswahl
-    property string displayMode: "LightSensor"
+    property string displayMode: "Home"
 }
