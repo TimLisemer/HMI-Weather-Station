@@ -36,7 +36,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     controller.h \
     sensorreader.h \
-    wiringPi.h
+    wiringPi.h \
+    wiringPiI2C.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/wiringPi/wiringPi/release/ -lwiringPi
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/wiringPi/wiringPi/debug/ -lwiringPi
