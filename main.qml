@@ -96,19 +96,10 @@ Window {
     Image {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: displayMode == "Light" && sensorReader.sensorValue < 1
+        visible: displayMode == "Light"
         width: 200  // Größere Breite
         height: 200 // Größere Höhe
-        source: "../img/Sun.png"
-    }
-
-    Image {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        visible: displayMode == "Light" && sensorReader.sensorValue > 0
-        width: 200  // Größere Breite
-        height: 200 // Größere Höhe
-        source: "../img/Moon.png"
+        source: sensorReader.sensorValue ? "../img/Moon.png" : "../img/Sun.png"
     }
 
     // Property für die Anzeigeauswahl

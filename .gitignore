@@ -1,1 +1,3 @@
 *.pro.*
+HelloWorld.pro
+build/
