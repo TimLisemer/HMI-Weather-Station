@@ -7,101 +7,118 @@ Window {
     width: 640
     height: 480
     title: qsTr("Sensor Reader")
-    color: "#454545" // Farbe für Hintergrund
+    color: "#454545" // Background color
 
     Column {
         width: parent.width
         spacing: 20
+        state: "Home"
+        id: main_column
 
-        // Row für die Buttons ganz oben
+        // Define states for each display mode
+        states: [
+            State {
+                name: "Home"
+                PropertyChanges { target: displayText; text: "Light Sensor: " + sensorReader.sensorValue
+                                    + "\n" +"Berlin Time: " + sensorReader.berlinTime + "\n" + "UTC Time: " + sensorReader.utcTime
+                                    + "\n" +"Humidity: " + sensorReader.humidity
+                                    + "\n" +"Air Pressure: " + sensorReader.pressure + " hPa"
+                                    + "\n" +"Temperature: " + sensorReader.temp + "°C" }
+                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayImage; visible: false }
+            },
+            State {
+                name: "Light"
+                PropertyChanges { target: displayText; text: "Light Sensor: " + sensorReader.sensorValue }
+                PropertyChanges { target: displayText; color: "Yellow" }
+                PropertyChanges { target: displayImage; visible: true }
+            },
+            State {
+                name: "Time"
+                PropertyChanges { target: displayText; text: "Berlin Time: " + sensorReader.berlinTime + "\n UTC Time: " + sensorReader.utcTime }
+                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayImage; visible: false }
+            },
+            State {
+                name: "Humidity"
+                PropertyChanges { target: displayText; text: "Humidity: " + sensorReader.humidity }
+                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayImage; visible: false }
+            },
+            State {
+                name: "Pressure"
+                PropertyChanges { target: displayText; text: "Air Pressure: " + sensorReader.pressure + " hPa" }
+                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayImage; visible: false }
+            },
+            State {
+                name: "Temp"
+                PropertyChanges { target: displayText; text: "Temperature: " + sensorReader.temp + "°C" }
+                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayImage; visible: false }
+            }
+        ]
+
+        // Row for buttons at the top
         Row {
             spacing: 10
             anchors.horizontalCenter: parent.horizontalCenter
 
             Button {
+                id: home_button
                 text: "<-"
-                onClicked: displayMode = "Home"
+                onClicked: main_column.state = "Home"
             }
 
-
             Button {
+                id: light_button
                 text: "Light"
-                onClicked: displayMode = "Light"
+                onClicked: main_column.state = "Light"
             }
 
             Button {
+                id: time_button
                 text: "Time"
-                onClicked: displayMode = "Time"
+                onClicked: main_column.state = "Time"
             }
 
             Button {
+                id: humidity_button
                 text: "Humidity"
-                onClicked: displayMode = "Humidity"
+                onClicked: main_column.state = "Humidity"
             }
 
             Button {
+                id: pressure_button
                 text: "Pressure"
-                onClicked: displayMode = "Pressure"
+                onClicked: main_column.state = "Pressure"
             }
 
             Button {
+                id: temperature_button
                 text: "Temp"
-                onClicked: displayMode = "Temp"
+                onClicked: main_column.state = "Temp"
             }
         }
 
-        // Text in der Mitte
+        // Text in the middle
         Text {
             id: displayText
             anchors.horizontalCenter: parent.horizontalCenter
-            //color: "white"
             font.pointSize: 24
-
-            text: {
-                switch (displayMode) {
-                    case "Home":
-                        return "Light Sensor: " + sensorReader.sensorValue
-                                + "\n" +"Berlin Time: " + sensorReader.berlinTime + "\n" + "UTC Time: " + sensorReader.utcTime
-                                + "\n" +"Humidity: " + sensorReader.humidity
-                                + "\n" +"Air Pressure: " + sensorReader.pressure + " hPa"
-                                + "\n" +"Temperature: " + sensorReader.temp + "°C"
-
-                    case "Light":
-                        return "Light Sensor: " + sensorReader.sensorValue
-                    case "Time":
-                        return "Berlin Time: " + sensorReader.berlinTime + "\n UTC Time: " + sensorReader.utcTime
-                    case "Humidity":
-                        return "Humidity: " + sensorReader.humidity
-                    case "Pressure":
-                        return "Air Pressure: " + sensorReader.pressure + " hPa"
-                    case "Temp":
-                        return "Temperature: " + sensorReader.temp + "°C"
-                    default:
-                        return "Select an option"
-                }
-            }
-
-            color: {
-                switch (displayMode) {
-                    case "Light":
-                        return "Yellow"
-                    default:
-                        return "white"
-                }
-            }
+            color: "white" // Default color
+            text: "Select an option" // Default text
         }
     }
 
-    // Bild in der Mitte des Bildschirms
+    // Image in the center of the screen
     Image {
+        id: displayImage
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: displayMode == "Light"
-        width: 200  // Größere Breite
-        height: 200 // Größere Höhe
+        visible: false // Default visibility
+        width: 200  // Larger width
+        height: 200 // Larger height
         source: sensorReader.sensorValue ? "../img/Moon.png" : "../img/Sun.png"
     }
-
-    // Property für die Anzeigeauswahl
-    property string displayMode: "Home"
 }
