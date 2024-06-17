@@ -2,12 +2,21 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.12
 
-Window {
+ApplicationWindow {
     visible: true
     width: 640
     height: 480
     title: qsTr("Sensor Reader")
     color: "#454545" // Background color
+
+    FontLoader {
+        id: digitalFont
+        source: "qrc:/font/DS-DIGI.TTF"
+    }
+
+    // Globale Schriftarteigenschaften festlegen
+    font.family: digitalFont.name
+    font.pointSize: 24
 
     Column {
         width: parent.width
@@ -15,7 +24,7 @@ Window {
         state: "Home"
         id: main_column
 
-        // Define states for each display mode
+        // Define states for each dzisplay mode
         states: [
             State {
                 name: "Home"
@@ -65,9 +74,16 @@ Window {
             anchors.horizontalCenter: parent.horizontalCenter
 
             Button {
-                id: home_button
-                text: "<-"
+                id: homeButton
+                width: 40
+                height: 40
                 onClicked: main_column.state = "Home"
+                contentItem: Image {
+                    source: "../img/homebutton.png"
+                    fillMode: Image.PreserveAspectFit
+                    width: 40
+                    height: 40
+                }
             }
 
             Button {
@@ -105,9 +121,11 @@ Window {
         Text {
             id: displayText
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: 24
+            font.family: digitalFont.name
+            font.pointSize: 30
             color: "white" // Default color
             text: "Select an option" // Default text
+
         }
     }
 

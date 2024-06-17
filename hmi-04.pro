@@ -20,7 +20,12 @@ SOURCES += \
 
 RESOURCES += qml.qrc \
     img/Moon.png \
-    img/Sun.png
+    img/Sun.png  \
+    img/homebutton.png \
+    font/DS-DIGI.TTF  \
+    font/DS-DIGIB.TTF  \
+    font/DS-DIGII.TTF  \
+    font/DS-DIGIT.TTF
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -48,4 +53,9 @@ DEPENDPATH += $$PWD/wiringPi/wiringPi
 
 DISTFILES += \
     img/Moon.png \
-    img/Sun.png
+    img/Sun.png \
+    img/homebutton.png\
+    font/DS-DIGI.TTF  \
+    font/DS-DIGIB.TTF  \
+    font/DS-DIGII.TTF  \
+    font/DS-DIGIT.TTF
