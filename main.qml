@@ -2,12 +2,21 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.12
 
-Window {
+ApplicationWindow {
     visible: true
     width: 640
     height: 480
     title: qsTr("Sensor Reader")
     color: "#454545" // Farbe für Hintergrund
+
+    FontLoader {
+        id: digitalFont
+        source: "qrc:/font/DS-DIGI.TTF"
+    }
+
+    // Globale Schriftarteigenschaften festlegen
+    font.family: digitalFont.name
+    font.pointSize: 24
 
     Column {
         width: parent.width
@@ -22,7 +31,6 @@ Window {
                 text: "<-"
                 onClicked: displayMode = "Home"
             }
-
 
             Button {
                 text: "Light"
@@ -54,8 +62,8 @@ Window {
         Text {
             id: displayText
             anchors.horizontalCenter: parent.horizontalCenter
-            //color: "white"
-            font.pointSize: 24
+            font.family: digitalFont.name
+            font.pointSize: 30
 
             text: {
                 switch (displayMode) {
@@ -65,7 +73,6 @@ Window {
                                 + "\n" +"Humidity: " + sensorReader.humidity
                                 + "\n" +"Air Pressure: " + sensorReader.pressure + " hPa"
                                 + "\n" +"Temperature: " + sensorReader.temp + "°C"
-
                     case "Light":
                         return "Light Sensor: " + sensorReader.sensorValue
                     case "Time":
