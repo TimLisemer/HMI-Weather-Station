@@ -28,8 +28,16 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
 
             Button {
-                text: "<-"
+                id: homeButton
+                width: 40
+                height: 40
                 onClicked: displayMode = "Home"
+                contentItem: Image {
+                    source: "../img/homebutton.png"
+                    fillMode: Image.PreserveAspectFit
+                    width: 40
+                    height: 40
+                }
             }
 
             Button {
