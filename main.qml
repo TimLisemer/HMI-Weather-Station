@@ -76,7 +76,7 @@ ApplicationWindow {
             Button {
                 id: homeButton
                 width: 40
-                height: 40
+                height: light_button.height
                 onClicked: main_column.state = "Home"
                 contentItem: Image {
                     source: "../img/homebutton.png"
