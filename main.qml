@@ -9,61 +9,65 @@ ApplicationWindow {
     title: qsTr("Sensor Reader")
     color: "#454545" // Background color
 
+    // Define a centralized theme
+    property color backgroundColor: "#454545"
+    property color textColor: "white"
+    property color highlightColor: "yellow"
+    property int fontSize: 24
+    property int buttonWidth: 100
+    property int buttonHeight: 40
+
     FontLoader {
         id: digitalFont
         source: "qrc:/font/DS-DIGI.TTF"
     }
 
-    // Globale Schriftarteigenschaften festlegen
+    // Global font properties
     font.family: digitalFont.name
-    font.pointSize: 24
+    font.pointSize: fontSize
 
     Column {
         width: parent.width
         spacing: 20
+        id: mainColumn
         state: "Home"
-        id: main_column
 
-        // Define states for each dzisplay mode
+        // Define states for each display mode
         states: [
             State {
                 name: "Home"
-                PropertyChanges { target: displayText; text: "Light Sensor: " + sensorReader.sensorValue
-                                    + "\n" +"Berlin Time: " + sensorReader.berlinTime + "\n" + "UTC Time: " + sensorReader.utcTime
-                                    + "\n" +"Humidity: " + sensorReader.humidity
-                                    + "\n" +"Air Pressure: " + sensorReader.pressure + " hPa"
-                                    + "\n" +"Temperature: " + sensorReader.temp + "°C" }
-                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayText; text: sensorReader.homeDisplayText }
+                PropertyChanges { target: displayText; color: textColor }
                 PropertyChanges { target: displayImage; visible: false }
             },
             State {
                 name: "Light"
-                PropertyChanges { target: displayText; text: "Light Sensor: " + sensorReader.sensorValue }
-                PropertyChanges { target: displayText; color: "Yellow" }
+                PropertyChanges { target: displayText; text: sensorReader.lightDisplayText }
+                PropertyChanges { target: displayText; color: highlightColor }
                 PropertyChanges { target: displayImage; visible: true }
             },
             State {
                 name: "Time"
-                PropertyChanges { target: displayText; text: "Berlin Time: " + sensorReader.berlinTime + "\n UTC Time: " + sensorReader.utcTime }
-                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayText; text: sensorReader.timeDisplayText }
+                PropertyChanges { target: displayText; color: textColor }
                 PropertyChanges { target: displayImage; visible: false }
             },
             State {
                 name: "Humidity"
-                PropertyChanges { target: displayText; text: "Humidity: " + sensorReader.humidity }
-                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayText; text: sensorReader.humidityDisplayText }
+                PropertyChanges { target: displayText; color: textColor }
                 PropertyChanges { target: displayImage; visible: false }
             },
             State {
                 name: "Pressure"
-                PropertyChanges { target: displayText; text: "Air Pressure: " + sensorReader.pressure + " hPa" }
-                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayText; text: sensorReader.pressureDisplayText }
+                PropertyChanges { target: displayText; color: textColor }
                 PropertyChanges { target: displayImage; visible: false }
             },
             State {
                 name: "Temp"
-                PropertyChanges { target: displayText; text: "Temperature: " + sensorReader.temp + "°C" }
-                PropertyChanges { target: displayText; color: "white" }
+                PropertyChanges { target: displayText; text: sensorReader.tempDisplayText }
+                PropertyChanges { target: displayText; color: textColor }
                 PropertyChanges { target: displayImage; visible: false }
             }
         ]
@@ -74,46 +78,50 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
 
             Button {
-                id: homeButton
-                width: 40
-                height: light_button.height
-                onClicked: main_column.state = "Home"
+                width: buttonWidth
+                height: buttonHeight
+                onClicked: mainColumn.state = "Home"
                 contentItem: Image {
                     source: "../img/homebutton.png"
                     fillMode: Image.PreserveAspectFit
-                    width: 40
-                    height: 40
+                    width: buttonWidth
+                    height: buttonHeight
                 }
             }
 
             Button {
-                id: light_button
+                width: buttonWidth
+                height: buttonHeight
                 text: "Light"
-                onClicked: main_column.state = "Light"
+                onClicked: mainColumn.state = "Light"
             }
 
             Button {
-                id: time_button
+                width: buttonWidth
+                height: buttonHeight
                 text: "Time"
-                onClicked: main_column.state = "Time"
+                onClicked: mainColumn.state = "Time"
             }
 
             Button {
-                id: humidity_button
+                width: buttonWidth
+                height: buttonHeight
                 text: "Humidity"
-                onClicked: main_column.state = "Humidity"
+                onClicked: mainColumn.state = "Humidity"
             }
 
             Button {
-                id: pressure_button
+                width: buttonWidth
+                height: buttonHeight
                 text: "Pressure"
-                onClicked: main_column.state = "Pressure"
+                onClicked: mainColumn.state = "Pressure"
             }
 
             Button {
-                id: temperature_button
+                width: buttonWidth
+                height: buttonHeight
                 text: "Temp"
-                onClicked: main_column.state = "Temp"
+                onClicked: mainColumn.state = "Temp"
             }
         }
 
@@ -123,9 +131,8 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             font.family: digitalFont.name
             font.pointSize: 30
-            color: "white" // Default color
+            color: textColor // Default color
             text: "Select an option" // Default text
-
         }
     }
 

@@ -8,7 +8,7 @@
 #define PIN_LSENSOR 4
 
 SensorReader::SensorReader(QObject *parent)
-    : QObject(parent), m_sensorValue(0), m_berlinTimeZone("Europe/Berlin")
+    : QObject(parent), m_sensorValue(0), m_berlinTimeZone("Europe/Berlin"), m_humidity("45%"), m_pressure("1013"), m_temp("22.5")
 {
     wiringPiSetup();
     pinMode(PIN_LSENSOR, INPUT);
@@ -20,6 +20,7 @@ SensorReader::SensorReader(QObject *parent)
     m_timeTimer.start(1000); // 1 second interval
 
     updateNetworkInfo();
+    updateDisplayTexts();
 }
 
 int SensorReader::sensorValue() const
@@ -49,12 +50,49 @@ QString SensorReader::hostname() const
     return m_hostname;
 }
 
+QString SensorReader::homeDisplayText() const
+{
+    return QString("Light Sensor: %1\nBerlin Time: %2\nUTC Time: %3\nHumidity: %4\nAir Pressure: %5 hPa\nTemperature: %6°C")
+        .arg(m_sensorValue)
+        .arg(berlinTime())
+        .arg(utcTime())
+        .arg(m_humidity)
+        .arg(m_pressure)
+        .arg(m_temp);
+}
+
+QString SensorReader::lightDisplayText() const
+{
+    return QString("Light Sensor: %1").arg(m_sensorValue);
+}
+
+QString SensorReader::timeDisplayText() const
+{
+    return QString("Berlin Time: %1\nUTC Time: %2").arg(berlinTime()).arg(utcTime());
+}
+
+QString SensorReader::humidityDisplayText() const
+{
+    return QString("Humidity: %1").arg(m_humidity);
+}
+
+QString SensorReader::pressureDisplayText() const
+{
+    return QString("Air Pressure: %1 hPa").arg(m_pressure);
+}
+
+QString SensorReader::tempDisplayText() const
+{
+    return QString("Temperature: %1°C").arg(m_temp);
+}
+
 void SensorReader::updateSensorValue()
 {
     int value = digitalRead(PIN_LSENSOR);
     if (value != m_sensorValue) {
         m_sensorValue = value;
         emit sensorValueChanged();
+        emit displayTextChanged();
     }
 }
 
@@ -62,6 +100,7 @@ void SensorReader::updateDateTime()
 {
     emit berlinTimeChanged();
     emit utcTimeChanged();
+    emit displayTextChanged();
 }
 
 void SensorReader::updateNetworkInfo()
@@ -83,4 +122,9 @@ void SensorReader::updateNetworkInfo()
     // Get hostname
     m_hostname = QHostInfo::localHostName();
     emit hostnameChanged();
+}
+
+void SensorReader::updateDisplayTexts()
+{
+    emit displayTextChanged();
 }
