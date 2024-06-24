@@ -4,7 +4,10 @@
 #include <QProcess>
 #include <QTextStream>
 #include <QFile>
-
+#include <bme280.h>
+#include <wiringPiI2C.h>
+#include <stdio.h>
+#include <math.h>
 #define PIN_LSENSOR 4
 
 SensorReader::SensorReader(QObject *parent)
@@ -21,6 +24,9 @@ SensorReader::SensorReader(QObject *parent)
 
     updateNetworkInfo();
     updateDisplayTexts();
+
+    bme280id = setupSensor();
+
 }
 
 int SensorReader::sensorValue() const
@@ -88,6 +94,22 @@ QString SensorReader::tempDisplayText() const
 
 void SensorReader::updateSensorValue()
 {
+    bme280_calib_data cal;
+    readCalibrationData(bme280id, &cal);
+
+    wiringPiI2CWriteReg8(bme280id, 0xf2, 0x01);   // humidity oversampling x 1
+    wiringPiI2CWriteReg8(bme280id, 0xf4, 0x25);   // pressure and temperature oversampling x 1, mode normal
+
+    bme280_raw_data raw;
+    getRawData(bme280id, &raw);
+
+    int32_t t_fine = getTemperatureCalibration(&cal, raw.temperature);
+
+    m_temp.setNum(compensateTemperature(t_fine)); //Celsius
+    m_pressure.setNum(compensatePressure(raw.pressure, &cal, t_fine)); //hpa
+    m_humidity.setNum(compensateHumidity(raw.humidity, &cal, t_fine)); //%
+
+
     int value = digitalRead(PIN_LSENSOR);
     if (value != m_sensorValue) {
         m_sensorValue = value;

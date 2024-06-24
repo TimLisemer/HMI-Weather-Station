@@ -61,6 +61,7 @@ private:
     QString m_humidity;
     QString m_pressure;
     QString m_temp;
+    int bme280id;
 };
 
 #endif // SENSORREADER_H
