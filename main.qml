@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.12
+import QtQuick.Layouts 1.12
 
 ApplicationWindow {
     visible: true
@@ -9,68 +10,19 @@ ApplicationWindow {
     title: qsTr("Sensor Reader")
     color: "#454545" // Background color
 
-    // Define a centralized theme
-    property color backgroundColor: "#454545"
-    property color textColor: "white"
-    property color highlightColor: "yellow"
-    property int fontSize: 24
-    property int buttonWidth: 100
-    property int buttonHeight: 40
-
     FontLoader {
         id: digitalFont
         source: "qrc:/font/DS-DIGI.TTF"
     }
 
-    // Global font properties
+    // Globale Schriftarteigenschaften festlegen
     font.family: digitalFont.name
-    font.pointSize: fontSize
+    font.pointSize: 24
 
     Column {
         width: parent.width
         spacing: 20
-        id: mainColumn
-        state: "Home"
-
-        // Define states for each display mode
-        states: [
-            State {
-                name: "Home"
-                PropertyChanges { target: displayText; text: sensorReader.homeDisplayText }
-                PropertyChanges { target: displayText; color: textColor }
-                PropertyChanges { target: displayImage; visible: false }
-            },
-            State {
-                name: "Light"
-                PropertyChanges { target: displayText; text: sensorReader.lightDisplayText }
-                PropertyChanges { target: displayText; color: highlightColor }
-                PropertyChanges { target: displayImage; visible: true }
-            },
-            State {
-                name: "Time"
-                PropertyChanges { target: displayText; text: sensorReader.timeDisplayText }
-                PropertyChanges { target: displayText; color: textColor }
-                PropertyChanges { target: displayImage; visible: false }
-            },
-            State {
-                name: "Humidity"
-                PropertyChanges { target: displayText; text: sensorReader.humidityDisplayText }
-                PropertyChanges { target: displayText; color: textColor }
-                PropertyChanges { target: displayImage; visible: false }
-            },
-            State {
-                name: "Pressure"
-                PropertyChanges { target: displayText; text: sensorReader.pressureDisplayText }
-                PropertyChanges { target: displayText; color: textColor }
-                PropertyChanges { target: displayImage; visible: false }
-            },
-            State {
-                name: "Temp"
-                PropertyChanges { target: displayText; text: sensorReader.tempDisplayText }
-                PropertyChanges { target: displayText; color: textColor }
-                PropertyChanges { target: displayImage; visible: false }
-            }
-        ]
+        id: main_column
 
         // Row for buttons at the top
         Row {
@@ -78,61 +30,97 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
 
             Button {
-                width: buttonWidth
-                height: buttonHeight
-                onClicked: mainColumn.state = "Home"
+                id: homeButton
+                width: 40
+                height: 40
+                onClicked: main_column.state = "Home"
                 contentItem: Image {
                     source: "../img/homebutton.png"
                     fillMode: Image.PreserveAspectFit
-                    width: buttonWidth
-                    height: buttonHeight
+                    width: 40
+                    height: 40
                 }
             }
 
             Button {
-                width: buttonWidth
-                height: buttonHeight
+                id: light_button
                 text: "Light"
-                onClicked: mainColumn.state = "Light"
+                onClicked: main_column.state = "Light"
             }
 
             Button {
-                width: buttonWidth
-                height: buttonHeight
+                id: time_button
                 text: "Time"
-                onClicked: mainColumn.state = "Time"
+                onClicked: main_column.state = "Time"
             }
 
             Button {
-                width: buttonWidth
-                height: buttonHeight
+                id: humidity_button
                 text: "Humidity"
-                onClicked: mainColumn.state = "Humidity"
+                onClicked: main_column.state = "Humidity"
             }
 
             Button {
-                width: buttonWidth
-                height: buttonHeight
+                id: pressure_button
                 text: "Pressure"
-                onClicked: mainColumn.state = "Pressure"
+                onClicked: main_column.state = "Pressure"
             }
 
             Button {
-                width: buttonWidth
-                height: buttonHeight
+                id: temperature_button
                 text: "Temp"
-                onClicked: mainColumn.state = "Temp"
+                onClicked: main_column.state = "Temp"
             }
         }
 
-        // Text in the middle
+        // Text in the middle for other states
         Text {
             id: displayText
+            visible: main_column.state !== "Home"
             anchors.horizontalCenter: parent.horizontalCenter
             font.family: digitalFont.name
             font.pointSize: 30
-            color: textColor // Default color
+            color: "white" // Default color
             text: "Select an option" // Default text
+        }
+    }
+
+    // Home GridView Layout
+    GridView {
+        id: homeGridView
+        visible: main_column.state === "Home"
+        width: parent.width
+        height: parent.height - main_column.height - 20
+        cellWidth: parent.width / 3
+        cellHeight: (parent.height - main_column.height - 20) / 3
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+
+        model: ListModel {
+            ListElement { label: "10.06.2024" }
+            ListElement { label: "Hostname\nIP" }
+            ListElement { label: "" }
+            ListElement { label: "67%" }
+            ListElement { label: "10:45" }
+            ListElement { label: "500 hPa" }
+            ListElement { label: "27°C" }
+            ListElement { label: "" }
+            ListElement { label: "" }
+        }
+
+        delegate: Item {
+            width: homeGridView.cellWidth
+            height: homeGridView.cellHeight
+
+            Text {
+                anchors.centerIn: parent
+                text: model.label
+                font.family: digitalFont.name
+                font.pointSize: 24
+                color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
         }
     }
 
@@ -141,7 +129,7 @@ ApplicationWindow {
         id: displayImage
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: false // Default visibility
+        visible: main_column.state === "Light"
         width: 200  // Larger width
         height: 200 // Larger height
         source: sensorReader.sensorValue ? "../img/Moon.png" : "../img/Sun.png"
