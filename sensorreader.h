@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QTimeZone>
 #include <wiringPi.h>
+#include <QList>
 
 class SensorReader : public QObject
 {
@@ -21,7 +22,6 @@ class SensorReader : public QObject
     Q_PROPERTY(QString humidityDisplayText READ humidityDisplayText NOTIFY displayTextChanged)
     Q_PROPERTY(QString pressureDisplayText READ pressureDisplayText NOTIFY displayTextChanged)
     Q_PROPERTY(QString tempDisplayText READ tempDisplayText NOTIFY displayTextChanged)
-
 public:
     explicit SensorReader(QObject *parent = nullptr);
 
@@ -36,6 +36,7 @@ public:
     QString humidityDisplayText() const;
     QString pressureDisplayText() const;
     QString tempDisplayText() const;
+    QList <float> historicTemps() const;
 
 signals:
     void sensorValueChanged();
@@ -62,6 +63,10 @@ private:
     QString m_pressure;
     QString m_temp;
     int bme280id;
+    QList <float> m_historicTemps;
+    QList <float> m_historicHums;
+    QList <float> m_historicPress;
+    int historicCounter=0;
 };
 
 #endif // SENSORREADER_H

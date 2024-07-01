@@ -7,7 +7,7 @@
 #include <bme280.h>
 #include <wiringPiI2C.h>
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 #define PIN_LSENSOR 4
 
 SensorReader::SensorReader(QObject *parent)
@@ -91,6 +91,18 @@ QString SensorReader::tempDisplayText() const
 {
     return QString("Temperature: %1°C").arg(m_temp);
 }
+QList <float> SensorReader::historicTemps() const{
+    return m_historicTemps;
+}
+float round(float var)
+{
+    // 37.66666 * 100 =3766.66
+    // 3766.66 + .5 =3767.16    for rounding off value
+    // then type cast to int so value is 3767
+    // then divided by 100 so the value converted into 37.67
+    float value = (int)(var * 100 + .5);
+    return (float)value / 100;
+}
 
 void SensorReader::updateSensorValue()
 {
@@ -105,10 +117,26 @@ void SensorReader::updateSensorValue()
 
     int32_t t_fine = getTemperatureCalibration(&cal, raw.temperature);
 
-    m_temp.setNum(compensateTemperature(t_fine)); //Celsius
-    m_pressure.setNum(compensatePressure(raw.pressure, &cal, t_fine)); //hpa
-    m_humidity.setNum(compensateHumidity(raw.humidity, &cal, t_fine)); //%
+    if(historicCounter<10){
+        historicCounter++;
+    }else{
+        m_historicTemps.append(round(compensateTemperature(t_fine)));
+        m_historicPress.append(round(compensatePressure(raw.pressure, &cal, t_fine)));
+        m_historicHums.append(round(compensateHumidity(raw.humidity, &cal, t_fine)));
 
+        historicCounter=0;
+
+        if (m_historicTemps.length()>18000){
+            m_historicTemps.pop_front();
+            m_historicPress.pop_front();
+            m_historicHums.pop_front();
+        }
+    }
+
+
+    m_temp.setNum(round(compensateTemperature(t_fine))); //Celsius
+    m_pressure.setNum(round(compensatePressure(raw.pressure, &cal, t_fine))); //hpa
+    m_humidity.setNum(round(compensateHumidity(raw.humidity, &cal, t_fine))); //%
 
     int value = digitalRead(PIN_LSENSOR);
     if (value != m_sensorValue) {
