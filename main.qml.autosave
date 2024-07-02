@@ -87,7 +87,7 @@ ApplicationWindow {
 
     Rectangle{
         width: 600; height: 400
-        anchors.left: 20
+        anchors.
 
         ListModel{
             id: objectModell
