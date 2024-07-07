@@ -33,14 +33,14 @@ ApplicationWindow {
 
         Button {
             id: homeButton
-            width: 40
-            height: 40
+            width: 45
+            height: 45
             onClicked: stackView.push("HomeScreen.qml")
             contentItem: Image {
                 source: "../img/homebutton.png"
                 fillMode: Image.PreserveAspectFit
-                width: 40
-                height: 40
+                width: 45
+                height: 45
             }
         }
 

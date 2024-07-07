@@ -17,14 +17,14 @@ Item {
         Text {
             text: "Berlin Time: " + sensorReader.berlinTime
             color: "white"
-            font.pointSize: 24
+            font.pointSize: 30
             font.family: digitalFont.name
         }
 
         Text {
             text: "UTC Time: " + sensorReader.utcTime
             color: "white"
-            font.pointSize: 24
+            font.pointSize: 30
             font.family: digitalFont.name
         }
 

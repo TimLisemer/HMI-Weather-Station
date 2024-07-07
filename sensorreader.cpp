@@ -93,17 +93,20 @@ QString SensorReader::timeDisplayText() const
 
 QString SensorReader::humidityDisplayText() const
 {
-    return QString("Humidity: %1").arg(m_humidity);
+    //return QString("Humidity: %1").arg(m_humidity);
+    return QString("%1").arg(m_humidity);
 }
 
 QString SensorReader::pressureDisplayText() const
 {
-    return QString("Air Pressure: %1 hPa").arg(m_pressure);
+    //return QString("Air Pressure: %1 hPa").arg(m_pressure);
+    return QString("%1 hPa").arg(m_pressure);
 }
 
 QString SensorReader::tempDisplayText() const
 {
-    return QString("Temperature: %1°C").arg(m_temp);
+    //return QString("Temperature: %1°C").arg(m_temp);
+    return QString("%1°C").arg(m_temp);
 }
 
 void SensorReader::updateSensorValue()
