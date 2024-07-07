@@ -34,6 +34,7 @@ int SensorReader::sensorValue() const
     return m_sensorValue;
 }
 
+/*
 QString SensorReader::berlinTime() const
 {
     QDateTime currentTime = QDateTime::currentDateTime();
@@ -44,6 +45,19 @@ QString SensorReader::utcTime() const
 {
     QDateTime currentTime = QDateTime::currentDateTimeUtc();
     return currentTime.toString("yyyy-MM-dd hh:mm:ss");
+}
+*/
+
+QString SensorReader::berlinTime() const
+{
+    QDateTime currentTime = QDateTime::currentDateTime();
+    return currentTime.toTimeZone(m_berlinTimeZone).toString("hh:mm:ss");
+}
+
+QString SensorReader::utcTime() const
+{
+    QDateTime currentTime = QDateTime::currentDateTimeUtc();
+    return currentTime.toString("hh:mm:ss");
 }
 
 QString SensorReader::ipAddress() const
