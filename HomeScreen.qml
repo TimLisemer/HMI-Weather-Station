@@ -12,14 +12,14 @@ Item {
         cellHeight: 180  // Höhe der Zellen
 
         model: ListModel {
-            ListElement { file: "../img/Moon.png"; name: "Time" }
-            ListElement { file: "../img/Moon.png"; name: "Hostname / IP" }
+            ListElement { name: "Time" }
+            ListElement { name: "Hostname / IP" }
             //ListElement { file: "../img/Moon.png"; name: "Hostname:" }
             //ListElement { file: "../img/Moon.png"; name: "IP:" }
-            ListElement { file: "../img/Moon.png"; name: "Light" }
-            ListElement { file: "../img/Moon.png"; name: "Humidity" }
-            ListElement { file: "../img/Moon.png"; name: "Pressure" }
-            ListElement { file: "../img/Moon.png"; name: "Temp" }
+            ListElement { name: "Light"}
+            ListElement { name: "Humidity" }
+            ListElement { name: "Pressure" }
+            ListElement { name: "Temp" }
         }
 
         delegate: Component {
@@ -31,13 +31,6 @@ Item {
                     anchors.centerIn: parent
                     spacing: 5
 
-                    /*Image {
-                        source: file
-                        width: 64
-                        height: 64
-                        smooth: true
-                        fillMode: Image.PreserveAspectFit
-                    }*/
                     Text {
                         text: name
                         font.pixelSize: 35
@@ -48,6 +41,15 @@ Item {
                     }
 
                     // Dynamisch verändernde Texte
+
+                    Text {
+                        text: name === "Light" ? ""+ sensorReader.lightDisplayText :""
+                        visible: name === "Light"
+                        font.pixelSize: 35
+                        font.family: digitalFont.name
+                        color: "white"
+                        horizontalAlignment: Image.AlignHCenter
+                    }
 
                     Text {
                         text: name === "Hostname / IP" ? ""+ sensorReader.hostname + "\n" +sensorReader.ipAddress:""
@@ -116,19 +118,3 @@ Item {
         }
     }
 }
-
-
-
-/*
-  Text {
-      text: "Hostname: " + sensorReader.hostname
-      color: "white"
-      font.pointSize: 24
-  }
-
-  Text {
-      text: "IP Address: " + sensorReader.ipAddress
-      color: "white"
-      font.pointSize: 24
-  }
-*/

@@ -83,7 +83,8 @@ QString SensorReader::homeDisplayText() const
 
 QString SensorReader::lightDisplayText() const
 {
-    return QString("Light Sensor: %1").arg(m_sensorValue);
+    //return QString("Light Sensor: %1").arg(m_sensorValue);
+    return QString("%1").arg(m_sensorValue);
 }
 
 QString SensorReader::timeDisplayText() const

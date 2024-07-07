@@ -14,6 +14,7 @@ Item {
             font.family: digitalFont.name
         }
 
+
         Image {
             source: sensorReader.lightValue ? "../img/Sun.png" : "../img/Moon.png"
             width: 200
