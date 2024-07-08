@@ -112,6 +112,14 @@ QString SensorReader::tempDisplayText() const
 QList <float> SensorReader::historicTemps() const{
     return m_historicTemps;
 }
+
+QList <float> SensorReader::historicHums() const{
+    return m_historicHums;
+}
+
+QList <float> SensorReader::historicPress() const{
+    return m_historicPress;
+}
 float round(float var)
 {
     // 37.66666 * 100 =3766.66

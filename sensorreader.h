@@ -26,6 +26,7 @@ public:
     explicit SensorReader(QObject *parent = nullptr);
 
     int sensorValue() const;
+
     QString berlinTime() const;
     QString utcTime() const;
     QString ipAddress() const;
@@ -36,7 +37,11 @@ public:
     QString humidityDisplayText() const;
     QString pressureDisplayText() const;
     QString tempDisplayText() const;
+
     QList <float> historicTemps() const;
+    QList <float> historicHums() const;
+    QList <float> historicPress() const;
+
 
 signals:
     void sensorValueChanged();
