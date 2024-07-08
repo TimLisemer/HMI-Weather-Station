@@ -22,6 +22,10 @@ class SensorReader : public QObject
     Q_PROPERTY(QString humidityDisplayText READ humidityDisplayText NOTIFY displayTextChanged)
     Q_PROPERTY(QString pressureDisplayText READ pressureDisplayText NOTIFY displayTextChanged)
     Q_PROPERTY(QString tempDisplayText READ tempDisplayText NOTIFY displayTextChanged)
+
+    Q_PROPERTY(QList <float> historicTemps READ historicTemps NOTIFY sensorValueChanged)
+    Q_PROPERTY(QList <float> historicHums READ historicHums NOTIFY sensorValueChanged)
+    Q_PROPERTY(QList <float> historicPress READ historicPress NOTIFY sensorValueChanged)
 public:
     explicit SensorReader(QObject *parent = nullptr);
 
