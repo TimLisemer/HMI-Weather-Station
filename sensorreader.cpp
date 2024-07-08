@@ -164,7 +164,7 @@ void SensorReader::updateSensorValue()
     m_pressure.setNum(round(compensatePressure(raw.pressure, &cal, t_fine))); //hpa
     m_humidity.setNum(round(compensateHumidity(raw.humidity, &cal, t_fine))); //%
 
-    int value = digitalRead(PIN_LSENSOR);
+    int value = !digitalRead(PIN_LSENSOR);
     if (value != m_sensorValue) {
         m_sensorValue = value;
         emit sensorValueChanged();

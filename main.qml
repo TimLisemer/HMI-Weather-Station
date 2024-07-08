@@ -26,7 +26,6 @@ ApplicationWindow {
         width: parent.width
         height: 60
         spacing: 10
-        padding: 10
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
 
