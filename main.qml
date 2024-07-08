@@ -8,9 +8,6 @@ ApplicationWindow {
     height: 600
     title: qsTr("Sensor Reader")
     color: "#454545" // Background color
-    //"#454545"
-
-    //property var sensorReader: null
 
     FontLoader {
         id: digitalFont
@@ -23,12 +20,11 @@ ApplicationWindow {
 
     // Header Row with Navigation Buttons
     Row {
-        width: parent.width
+        width: childrenRect.width  // Use the width of the children
         height: 60
         spacing: 10
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-
+        anchors.horizontalCenter: parent.horizontalCenter // Center the Row horizontally
 
         Button {
             id: homeButton
