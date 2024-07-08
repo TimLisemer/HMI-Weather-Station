@@ -34,6 +34,7 @@ int SensorReader::sensorValue() const
     return m_sensorValue;
 }
 
+/*
 QString SensorReader::berlinTime() const
 {
     QDateTime currentTime = QDateTime::currentDateTime();
@@ -44,6 +45,19 @@ QString SensorReader::utcTime() const
 {
     QDateTime currentTime = QDateTime::currentDateTimeUtc();
     return currentTime.toString("yyyy-MM-dd hh:mm:ss");
+}
+*/
+
+QString SensorReader::berlinTime() const
+{
+    QDateTime currentTime = QDateTime::currentDateTime();
+    return currentTime.toTimeZone(m_berlinTimeZone).toString("hh:mm:ss");
+}
+
+QString SensorReader::utcTime() const
+{
+    QDateTime currentTime = QDateTime::currentDateTimeUtc();
+    return currentTime.toString("hh:mm:ss");
 }
 
 QString SensorReader::ipAddress() const
@@ -69,7 +83,8 @@ QString SensorReader::homeDisplayText() const
 
 QString SensorReader::lightDisplayText() const
 {
-    return QString("Light Sensor: %1").arg(m_sensorValue);
+    //return QString("Light Sensor: %1").arg(m_sensorValue);
+    return QString("%1").arg(m_sensorValue);
 }
 
 QString SensorReader::timeDisplayText() const
@@ -79,17 +94,20 @@ QString SensorReader::timeDisplayText() const
 
 QString SensorReader::humidityDisplayText() const
 {
-    return QString("Humidity: %1").arg(m_humidity);
+    //return QString("Humidity: %1").arg(m_humidity);
+    return QString("%1").arg(m_humidity);
 }
 
 QString SensorReader::pressureDisplayText() const
 {
-    return QString("Air Pressure: %1 hPa").arg(m_pressure);
+    //return QString("Air Pressure: %1 hPa").arg(m_pressure);
+    return QString("%1 hPa").arg(m_pressure);
 }
 
 QString SensorReader::tempDisplayText() const
 {
-    return QString("Temperature: %1°C").arg(m_temp);
+    //return QString("Temperature: %1°C").arg(m_temp);
+    return QString("%1°C").arg(m_temp);
 }
 QList <float> SensorReader::historicTemps() const{
     return m_historicTemps;
