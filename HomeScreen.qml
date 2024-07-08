@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 Item {
-    // anchors.fill: parent
+    //anchors.fill: parent
 
     GridView {
         id: gridView
