@@ -8,6 +8,7 @@
 #include <wiringPiI2C.h>
 #include <stdio.h>
 #include <cmath>
+#include <algorithm>
 #define PIN_LSENSOR 4
 
 SensorReader::SensorReader(QObject *parent)
@@ -109,6 +110,7 @@ QString SensorReader::tempDisplayText() const
     //return QString("Temperature: %1°C").arg(m_temp);
     return QString("%1°C").arg(m_temp);
 }
+
 QList <float> SensorReader::historicTemps() const{
     return m_historicTemps;
 }
@@ -120,6 +122,7 @@ QList <float> SensorReader::historicHums() const{
 QList <float> SensorReader::historicPress() const{
     return m_historicPress;
 }
+
 float round(float var)
 {
     // 37.66666 * 100 =3766.66
@@ -146,19 +149,22 @@ void SensorReader::updateSensorValue()
     if(historicCounter<10){
         historicCounter++;
     }else{
-        m_historicTemps.append(round(compensateTemperature(t_fine)));
-        m_historicPress.append(round(compensatePressure(raw.pressure, &cal, t_fine)));
-        m_historicHums.append(round(compensateHumidity(raw.humidity, &cal, t_fine)));
+        if (compensateTemperature(t_fine) != 0 && compensatePressure(raw.pressure, &cal, t_fine) != 0 && compensateHumidity(raw.humidity, &cal, t_fine) != 0) {
+
+
+        m_historicTemps.append((compensateTemperature(t_fine)));
+        m_historicPress.append((compensatePressure(raw.pressure, &cal, t_fine)));
+        m_historicHums.append((compensateHumidity(raw.humidity, &cal, t_fine)));
 
         historicCounter=0;
 
-        if (m_historicTemps.length()>18000){
+        if (m_historicTemps.length()>180){
             m_historicTemps.pop_front();
             m_historicPress.pop_front();
             m_historicHums.pop_front();
         }
     }
-
+}
 
     m_temp.setNum(round(compensateTemperature(t_fine))); //Celsius
     m_pressure.setNum(round(compensatePressure(raw.pressure, &cal, t_fine))); //hpa
@@ -171,6 +177,59 @@ void SensorReader::updateSensorValue()
         emit displayTextChanged();
     }
 }
+
+QList<float> SensorReader::chartHistoricTempsData() const {
+    int count = m_historicTemps.size();
+    QList<float> result;
+
+    int startIndex = std::max(0, count - 5);
+
+    for (int i = startIndex; i < count; ++i) {
+        result.append(m_historicTemps[i]);
+    }
+
+    return result;
+}
+
+QList<float> SensorReader::chartHistoricPressData() const {
+    int count = m_historicPress.size();
+    QList<float> result;
+
+    int startIndex = std::max(0, count - 5);
+    for (int i = startIndex; i < count; ++i) {
+        result.append(m_historicPress[i]);
+    }
+
+    return result;
+}
+
+QList<float> SensorReader::chartHistoricHumsData() const {
+    int count = m_historicHums.size();
+    QList<float> result;
+    int startIndex = std::max(0, count - 5);
+
+    for (int i = startIndex; i < count; ++i) {
+        result.append(m_historicHums[i]);
+    }
+
+    return result;
+}
+
+QStringList SensorReader::chartHistoricTimeCategories() const {
+
+    QStringList result;
+
+    QDateTime currentTime = QDateTime::currentDateTime();
+
+    for (int i = 0; i < 5; i++) {
+        result.prepend(currentTime.addSecs(-1 * i).toString("hh:mm:ss"));
+    }
+
+
+    return result;
+
+}
+
 
 void SensorReader::updateDateTime()
 {
@@ -204,3 +263,6 @@ void SensorReader::updateDisplayTexts()
 {
     emit displayTextChanged();
 }
+
+
+

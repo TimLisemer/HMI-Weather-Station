@@ -6,20 +6,10 @@ Item {
 
     BarChart {
         label: "Temperature"
-        categories: ["Jan", "Feb", "Mar", "Apr", "May"]
-        values: sensorReader.historicTemps
-
+        categories: sensorReader.chartHistoricTimeCategories
+        values: sensorReader.chartHistoricTempsData
         Component.onCompleted: {
-            console.log("HumidityScreen loaded with values: ", values)
+            console.log("Temperature Screen loaded with values: ", sensorReader.chartHistoricTempsData)
         }
-    }
-
-    Text {
-        text: "" + sensorReader.tempDisplayText
-        font.pixelSize: 30
-        font.family: digitalFont.name
-        horizontalAlignment: Text.AlignHCenter
-        color: "white"
-        visible: name === "Temp"
     }
 }

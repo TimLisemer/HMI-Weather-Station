@@ -6,8 +6,8 @@ Item {
 
     BarChart {
         label: "Pressure"
-        categories: ["Jan", "Feb", "Mar", "Apr", "May"]
-        values: sensorReader.historicPress
+        categories: sensorReader.chartHistoricTimeCategories
+        values: sensorReader.chartHistoricPressData
         Component.onCompleted: {
             console.log("HumidityScreen loaded with values: ", values)
         }
