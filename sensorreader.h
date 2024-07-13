@@ -26,6 +26,15 @@ class SensorReader : public QObject
     Q_PROPERTY(QList <float> historicTemps READ historicTemps NOTIFY sensorValueChanged)
     Q_PROPERTY(QList <float> historicHums READ historicHums NOTIFY sensorValueChanged)
     Q_PROPERTY(QList <float> historicPress READ historicPress NOTIFY sensorValueChanged)
+
+    Q_PROPERTY(QList <float> chartHistoricTempsData READ chartHistoricTempsData NOTIFY sensorValueChanged)
+    Q_PROPERTY(QList <float> chartHistoricPressData READ chartHistoricPressData NOTIFY sensorValueChanged)
+    Q_PROPERTY(QList <float> chartHistoricHumsData READ chartHistoricHumsData NOTIFY sensorValueChanged)
+
+
+
+    Q_PROPERTY(QStringList chartHistoricTimeCategories READ chartHistoricTimeCategories NOTIFY sensorValueChanged)
+
 public:
     explicit SensorReader(QObject *parent = nullptr);
 
@@ -45,6 +54,16 @@ public:
     QList <float> historicTemps() const;
     QList <float> historicHums() const;
     QList <float> historicPress() const;
+
+    QList <float> chartHistoricTempsData() const;
+    QList <float> chartHistoricPressData() const;
+    QList <float> chartHistoricHumsData() const;
+
+
+
+
+    QStringList chartHistoricTimeCategories() const;
+
 
 
 signals:

@@ -7,8 +7,8 @@ Item {
 
     BarChart {
         label: "Humidity"
-        categories: ["Jan", "Feb", "Mar", "Apr", "May"]
-        values: sensorReader.historicHums // Example data
+        categories: sensorReader.chartHistoricTimeCategories
+        values: sensorReader.chartHistoricHumsData
 
         Component.onCompleted: {
             console.log("HumidityScreen loaded with values: ", values)
