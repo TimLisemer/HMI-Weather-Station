@@ -8,6 +8,9 @@ ApplicationWindow {
     height: 600
     title: qsTr("Sensor Reader")
     color: "#454545" // Background color
+    property bool showHumidityChart: true
+    property bool showPressureChart: true
+    property bool showTemperatureChart: true
 
     FontLoader {
         id: digitalFont
@@ -20,6 +23,7 @@ ApplicationWindow {
 
     // Header Row with Navigation Buttons
     Row {
+        id: button_row
         width: childrenRect.width  // Use the width of the children
         height: 60
         spacing: 10
@@ -54,19 +58,28 @@ ApplicationWindow {
         Button {
             id: humidityButton
             text: "Humidity"
-            onClicked: stackView.push("HumidityScreen.qml")
+            onClicked: {
+                stackView.push("HumidityScreen.qml")
+                showHumidityChart = !showHumidityChart;
+            }
         }
 
         Button {
             id: pressureButton
             text: "Pressure"
-            onClicked: stackView.push("PressureScreen.qml")
+            onClicked: {
+                stackView.push("PressureScreen.qml")
+                showPressureChart = !showPressureChart;
+            }
         }
 
         Button {
             id: temperatureButton
             text: "Temperature"
-            onClicked: stackView.push("TemperatureScreen.qml")
+            onClicked: {
+                stackView.push("TemperatureScreen.qml")
+                showTemperatureChart = !showTemperatureChart;
+            }
         }
     }
 

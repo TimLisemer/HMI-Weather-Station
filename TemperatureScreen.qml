@@ -5,11 +5,24 @@ Item {
     // anchors.fill: parent
 
     BarChart {
+        id: temperatureChart
+        visible: !showTemperatureChart
         label: "Temperature"
         categories: sensorReader.chartHistoricTimeCategories
         values: sensorReader.chartHistoricTempsData
         Component.onCompleted: {
-            console.log("Temperature Screen loaded with values: ", sensorReader.chartHistoricTempsData)
+            console.log("Temperature Screen loaded with values: ", values)
+        }
+    }
+
+    DetailView {
+        id: temperatureDetail
+        visible: showTemperatureChart
+        categories: sensorReader.chartHistoricTimeCategories
+        values: sensorReader.chartHistoricTempsData
+
+        Component.onCompleted: {
+            console.log("Temperature Detail Screen loaded with values: ", values)
         }
     }
 }

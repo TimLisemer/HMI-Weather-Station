@@ -3,26 +3,28 @@ import QtQuick.Controls 2.12
 import QtCharts 2.12
 
 Item {
-    // anchors.fill: parent
 
     BarChart {
+        id: humidityChart
+        visible: !showHumidityChart
         label: "Humidity"
         categories: sensorReader.chartHistoricTimeCategories
         values: sensorReader.chartHistoricHumsData
 
         Component.onCompleted: {
-            console.log("HumidityScreen loaded with values: ", values)
+            console.log("Humidity Bar Chart loaded with values: ", values)
         }
     }
 
-    /*Text {
-        text: "" + sensorReader.humidityDisplayText
-        font.pixelSize: 30
-        font.family: digitalFont.name
-        horizontalAlignment: Text.AlignHCenter
-        color: "white"
-        visible: name === "Humidity"
-    }*/
+    DetailView {
+        id: humidityDetail
+        visible: showHumidityChart
+        categories: sensorReader.chartHistoricTimeCategories
+        values: sensorReader.chartHistoricHumsData
 
+        Component.onCompleted: {
+            console.log("Humidity Detail Screen loaded with values: ", values)
+        }
+    }
 
 }

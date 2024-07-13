@@ -8,5 +8,6 @@
         <file>HumidityScreen.qml</file>
         <file>PressureScreen.qml</file>
         <file>TemperatureScreen.qml</file>
+        <file>DetailView.qml</file>
     </qresource>
 </RCC>
