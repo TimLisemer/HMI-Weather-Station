@@ -6,7 +6,7 @@ Item {
         id: pressureChart
         visible: !showPressureChart
         label: "Pressure"
-        categories: sensorReader.chartHistoricTimeCategories
+        categories: sensorReader.chartHistoricPressTimeCategories
         values: sensorReader.chartHistoricPressData
         Component.onCompleted: {
             console.log("Pressure Screen loaded with values: ", values)
@@ -16,8 +16,8 @@ Item {
     DetailView {
         id: pressureDetail
         visible: showPressureChart
-        categories: sensorReader.chartHistoricTimeCategories
-        values: sensorReader.chartHistoricPressData
+        categories: sensorReader.historicPressTimeCategories
+        values: sensorReader.historicPress
 
         Component.onCompleted: {
             console.log("Pressure Detail Screen loaded with values: ", values)

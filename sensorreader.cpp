@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <algorithm>
+
 #define PIN_LSENSOR 4
 
 SensorReader::SensorReader(QObject *parent)
@@ -27,27 +28,12 @@ SensorReader::SensorReader(QObject *parent)
     updateDisplayTexts();
 
     bme280id = setupSensor();
-
 }
 
 int SensorReader::sensorValue() const
 {
     return m_sensorValue;
 }
-
-/*
-QString SensorReader::berlinTime() const
-{
-    QDateTime currentTime = QDateTime::currentDateTime();
-    return currentTime.toTimeZone(m_berlinTimeZone).toString("yyyy-MM-dd hh:mm:ss");
-}
-
-QString SensorReader::utcTime() const
-{
-    QDateTime currentTime = QDateTime::currentDateTimeUtc();
-    return currentTime.toString("yyyy-MM-dd hh:mm:ss");
-}
-*/
 
 QString SensorReader::berlinTime() const
 {
@@ -84,7 +70,6 @@ QString SensorReader::homeDisplayText() const
 
 QString SensorReader::lightDisplayText() const
 {
-    //return QString("Light Sensor: %1").arg(m_sensorValue);
     return QString("%1").arg(m_sensorValue);
 }
 
@@ -95,40 +80,46 @@ QString SensorReader::timeDisplayText() const
 
 QString SensorReader::humidityDisplayText() const
 {
-    //return QString("Humidity: %1").arg(m_humidity);
     return QString("%1").arg(m_humidity);
 }
 
 QString SensorReader::pressureDisplayText() const
 {
-    //return QString("Air Pressure: %1 hPa").arg(m_pressure);
     return QString("%1 hPa").arg(m_pressure);
 }
 
 QString SensorReader::tempDisplayText() const
 {
-    //return QString("Temperature: %1°C").arg(m_temp);
     return QString("%1°C").arg(m_temp);
 }
 
-QList <float> SensorReader::historicTemps() const{
+QList<float> SensorReader::historicTemps() const {
     return m_historicTemps;
 }
 
-QList <float> SensorReader::historicHums() const{
+QList<float> SensorReader::historicHums() const {
     return m_historicHums;
 }
 
-QList <float> SensorReader::historicPress() const{
+QList<float> SensorReader::historicPress() const {
     return m_historicPress;
 }
 
+QStringList SensorReader::historicTempsTimeCategories() const {
+    return m_tempTimeCategories;
+}
+
+QStringList SensorReader::historicHumsTimeCategories() const {
+    return m_humidityTimeCategories;
+}
+
+QStringList SensorReader::historicPressTimeCategories() const {
+    return m_pressureTimeCategories;
+}
+
+
 float round(float var)
 {
-    // 37.66666 * 100 =3766.66
-    // 3766.66 + .5 =3767.16    for rounding off value
-    // then type cast to int so value is 3767
-    // then divided by 100 so the value converted into 37.67
     float value = (int)(var * 100 + .5);
     return (float)value / 100;
 }
@@ -146,29 +137,38 @@ void SensorReader::updateSensorValue()
 
     int32_t t_fine = getTemperatureCalibration(&cal, raw.temperature);
 
-    if(historicCounter<10){
+    if (historicCounter < 10) {
         historicCounter++;
-    }else{
+    } else {
         if (compensateTemperature(t_fine) != 0 && compensatePressure(raw.pressure, &cal, t_fine) != 0 && compensateHumidity(raw.humidity, &cal, t_fine) != 0) {
 
+            QDateTime currentTime = QDateTime::currentDateTime();
+            QString currentTimeString = currentTime.toString("hh:mm:ss");
 
-        m_historicTemps.append((compensateTemperature(t_fine)));
-        m_historicPress.append((compensatePressure(raw.pressure, &cal, t_fine)));
-        m_historicHums.append((compensateHumidity(raw.humidity, &cal, t_fine)));
+            m_historicTemps.append(compensateTemperature(t_fine));
+            m_historicPress.append(compensatePressure(raw.pressure, &cal, t_fine));
+            m_historicHums.append(compensateHumidity(raw.humidity, &cal, t_fine));
 
-        historicCounter=0;
+            m_tempTimeCategories.append(currentTimeString);
+            m_pressureTimeCategories.append(currentTimeString);
+            m_humidityTimeCategories.append(currentTimeString);
 
-        if (m_historicTemps.length()>180){
-            m_historicTemps.pop_front();
-            m_historicPress.pop_front();
-            m_historicHums.pop_front();
+            historicCounter = 0;
+
+            if (m_historicTemps.length() > 180) {
+                m_historicTemps.pop_front();
+                m_historicPress.pop_front();
+                m_historicHums.pop_front();
+                m_tempTimeCategories.pop_front();
+                m_pressureTimeCategories.pop_front();
+                m_humidityTimeCategories.pop_front();
+            }
         }
     }
-}
 
-    m_temp.setNum(round(compensateTemperature(t_fine))); //Celsius
-    m_pressure.setNum(round(compensatePressure(raw.pressure, &cal, t_fine))); //hpa
-    m_humidity.setNum(round(compensateHumidity(raw.humidity, &cal, t_fine))); //%
+    m_temp.setNum(round(compensateTemperature(t_fine))); // Celsius
+    m_pressure.setNum(round(compensatePressure(raw.pressure, &cal, t_fine))); // hpa
+    m_humidity.setNum(round(compensateHumidity(raw.humidity, &cal, t_fine))); // %
 
     int value = !digitalRead(PIN_LSENSOR);
     if (value != m_sensorValue) {
@@ -179,57 +179,77 @@ void SensorReader::updateSensorValue()
 }
 
 QList<float> SensorReader::chartHistoricTempsData() const {
-    int count = m_historicTemps.size();
-    QList<float> result;
-
-    int startIndex = std::max(0, count - 5);
-
-    for (int i = startIndex; i < count; ++i) {
-        result.append(m_historicTemps[i]);
-    }
-
-    return result;
+    return averageIntoSlices(m_historicTemps);
 }
 
 QList<float> SensorReader::chartHistoricPressData() const {
-    int count = m_historicPress.size();
-    QList<float> result;
-
-    int startIndex = std::max(0, count - 5);
-    for (int i = startIndex; i < count; ++i) {
-        result.append(m_historicPress[i]);
-    }
-
-    return result;
+    return averageIntoSlices(m_historicPress);
 }
 
 QList<float> SensorReader::chartHistoricHumsData() const {
-    int count = m_historicHums.size();
+    return averageIntoSlices(m_historicHums);
+}
+
+QStringList SensorReader::chartHistoricTempsTimeCategories() const {
+    return averageTimesIntoSlices(m_tempTimeCategories);
+}
+
+QStringList SensorReader::chartHistoricPressTimeCategories() const {
+    return averageTimesIntoSlices(m_pressureTimeCategories);
+}
+
+QStringList SensorReader::chartHistoricHumsTimeCategories() const {
+    return averageTimesIntoSlices(m_humidityTimeCategories);
+}
+
+QList<float> SensorReader::averageIntoSlices(const QList<float>& data) const {
+    int count = data.size();
     QList<float> result;
-    int startIndex = std::max(0, count - 5);
+    int combined = 0;
+    int sliceSize = std::max(1, count / 5);  // Ensure sliceSize is at least 1 to avoid division by zero
 
-    for (int i = startIndex; i < count; ++i) {
-        result.append(m_historicHums[i]);
+    for (int i = 0; i < count; ++i) {
+        combined += data[i];
+        if ((i + 1) % sliceSize == 0 || i == count - 1) { // Check end of each segment
+            result.append(combined / ((i % sliceSize) + 1)); // Divide sum by number of elements in the current segment
+            combined = 0; // Reset combined for next segment
+        }
     }
 
     return result;
 }
 
-QStringList SensorReader::chartHistoricTimeCategories() const {
-
+QStringList SensorReader::averageTimesIntoSlices(const QStringList& times) const {
+    int count = times.size();
     QStringList result;
+    int sliceSize = count / 5;  // Calculate the approximate size of each slice
 
-    QDateTime currentTime = QDateTime::currentDateTime();
-
-    for (int i = 0; i < 5; i++) {
-        result.prepend(currentTime.addSecs(-1 * i).toString("hh:mm:ss"));
+    if (sliceSize == 0) {
+        // If there are fewer than 5 elements, return all elements as they are
+        return times;
     }
 
+    int combinedSeconds = 0;
+    int elementsInSlice = 0;
+
+    for (int i = 0; i < count; ++i) {
+        QTime time = QTime::fromString(times[i], "hh:mm:ss");
+        combinedSeconds += QTime(0, 0, 0).secsTo(time); // Accumulate seconds from start of day
+
+        ++elementsInSlice;
+
+        if ((i + 1) % sliceSize == 0 || i == count - 1) { // Check end of each segment
+            int averageSeconds = combinedSeconds / elementsInSlice;
+            QTime averageTime(0, 0, 0);
+            averageTime = averageTime.addSecs(averageSeconds);
+            result.append(averageTime.toString("hh:mm:ss"));
+            combinedSeconds = 0; // Reset combinedSeconds for next segment
+            elementsInSlice = 0;
+        }
+    }
 
     return result;
-
 }
-
 
 void SensorReader::updateDateTime()
 {
@@ -263,6 +283,3 @@ void SensorReader::updateDisplayTexts()
 {
     emit displayTextChanged();
 }
-
-
-

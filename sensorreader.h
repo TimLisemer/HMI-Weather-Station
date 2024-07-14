@@ -31,9 +31,13 @@ class SensorReader : public QObject
     Q_PROPERTY(QList <float> chartHistoricPressData READ chartHistoricPressData NOTIFY sensorValueChanged)
     Q_PROPERTY(QList <float> chartHistoricHumsData READ chartHistoricHumsData NOTIFY sensorValueChanged)
 
+    Q_PROPERTY(QStringList historicTempsTimeCategories READ historicTempsTimeCategories NOTIFY sensorValueChanged)
+    Q_PROPERTY(QStringList historicHumsTimeCategories READ historicHumsTimeCategories NOTIFY sensorValueChanged)
+    Q_PROPERTY(QStringList historicPressTimeCategories READ historicPressTimeCategories NOTIFY sensorValueChanged)
 
-
-    Q_PROPERTY(QStringList chartHistoricTimeCategories READ chartHistoricTimeCategories NOTIFY sensorValueChanged)
+    Q_PROPERTY(QStringList chartHistoricTempsTimeCategories READ chartHistoricTempsTimeCategories NOTIFY sensorValueChanged)
+    Q_PROPERTY(QStringList chartHistoricHumsTimeCategories READ chartHistoricHumsTimeCategories NOTIFY sensorValueChanged)
+    Q_PROPERTY(QStringList chartHistoricPressTimeCategories READ chartHistoricPressTimeCategories NOTIFY sensorValueChanged)
 
 public:
     explicit SensorReader(QObject *parent = nullptr);
@@ -60,9 +64,14 @@ public:
     QList <float> chartHistoricHumsData() const;
 
 
+    QStringList historicTempsTimeCategories() const;
+    QStringList historicHumsTimeCategories() const;
+    QStringList historicPressTimeCategories() const;
 
+    QStringList chartHistoricTempsTimeCategories() const;
+    QStringList chartHistoricHumsTimeCategories() const;
+    QStringList chartHistoricPressTimeCategories() const;
 
-    QStringList chartHistoricTimeCategories() const;
 
 
 
@@ -94,7 +103,12 @@ private:
     QList <float> m_historicTemps;
     QList <float> m_historicHums;
     QList <float> m_historicPress;
+    QStringList m_humidityTimeCategories;
+    QStringList m_pressureTimeCategories;
+    QStringList m_tempTimeCategories;
     int historicCounter=0;
+    QList<float> averageIntoSlices(const QList<float>& data) const;
+    QStringList averageTimesIntoSlices(const QStringList& times) const;
 };
 
 #endif // SENSORREADER_H

@@ -8,7 +8,7 @@ Item {
         id: temperatureChart
         visible: !showTemperatureChart
         label: "Temperature"
-        categories: sensorReader.chartHistoricTimeCategories
+        categories: sensorReader.chartHistoricTempsTimeCategories
         values: sensorReader.chartHistoricTempsData
         Component.onCompleted: {
             console.log("Temperature Screen loaded with values: ", values)
@@ -18,8 +18,8 @@ Item {
     DetailView {
         id: temperatureDetail
         visible: showTemperatureChart
-        categories: sensorReader.chartHistoricTimeCategories
-        values: sensorReader.chartHistoricTempsData
+        categories: sensorReader.historicTempsTimeCategories
+        values: sensorReader.historicTemps
 
         Component.onCompleted: {
             console.log("Temperature Detail Screen loaded with values: ", values)

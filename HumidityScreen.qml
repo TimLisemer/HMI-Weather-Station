@@ -8,7 +8,7 @@ Item {
         id: humidityChart
         visible: !showHumidityChart
         label: "Humidity"
-        categories: sensorReader.chartHistoricTimeCategories
+        categories: sensorReader.chartHistoricHumsTimeCategories
         values: sensorReader.chartHistoricHumsData
 
         Component.onCompleted: {
@@ -19,8 +19,8 @@ Item {
     DetailView {
         id: humidityDetail
         visible: showHumidityChart
-        categories: sensorReader.chartHistoricTimeCategories
-        values: sensorReader.chartHistoricHumsData
+        categories: sensorReader.historicHumsTimeCategories
+        values: sensorReader.historicHums
 
         Component.onCompleted: {
             console.log("Humidity Detail Screen loaded with values: ", values)
