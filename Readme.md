@@ -1,5 +1,4 @@
 # HMI - Projekt
-# Human Machine Interfaces Projekt
 
 ## Projektbeschreibung
 
